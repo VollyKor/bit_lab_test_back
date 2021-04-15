@@ -4,7 +4,7 @@ const db = require("../db/db");
 const getAll = async (req, res, next) => {
   try {
     const query = req.query;
-    const { page = 1, limit = 59 } = query;
+    const { page = 1, limit = 50 } = query;
 
     let totalCount = 0;
     const nextOffset = (page - 1) * limit;
@@ -15,6 +15,7 @@ const getAll = async (req, res, next) => {
           res.status(400).json({ error: err.message });
           return;
         }
+        console.log(row);
         totalCount = row[0]["COUNT (*)"];
       }).all(stats.getDatabyPage(nextOffset, limit), [], function (err, row) {
         if (err) {

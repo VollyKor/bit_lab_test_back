@@ -15,7 +15,7 @@ const getAllStatsbyId =
 const countAllDataById =
   " SELECT COUNT (*) FROM stats INNER JOIN statistic ON statistic.user_id = stats.id WHERE user_id = ?";
 
-const getStatisticByPage = `Select * FROM stats INNER JOIN statistic ON statistic.user_id = stats.id LIMIT=? OFFSET=? `;
+// const getStatisticByPage = `Select * FROM stats INNER JOIN statistic ON statistic.user_id = stats.id LIMIT=? OFFSET=? `;
 
 const getAllData =
   "Select * FROM stats INNER JOIN statistic ON statistic.user_id = stats.id";
@@ -57,7 +57,6 @@ const addStatistic =
 module.exports = {
   getAllStatsbyId,
   countAllDataById,
-  getStatisticByPage,
   getDatabyPage,
   getAllData,
   countAllData,
