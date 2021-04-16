@@ -1,9 +1,11 @@
-SELECT stats.id,
+SELECT DISTINCT stats.id,
     stats.first_name,
     stats.last_name,
     stats.email,
     stats.gender,
     stats.ip_adress,
+    statistic.user_id,
+    statistic.date,
     SUM(statistic.total_click) AS total_click,
     SUM(statistic.total_page_views) AS total_page_views
 FROM stats

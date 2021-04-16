@@ -58,12 +58,13 @@ const getAllData =
   "Select * FROM stats INNER JOIN statistic ON statistic.user_id = stats.id";
 
 const getSum =
-  "SELECT stats.id,\
+  "SELECT DISTINCT stats.id,\
     stats.first_name,\
     stats.last_name,\
     stats.email,\
     stats.gender,\
     stats.ip_adress,\
+    statistic.user_id, \
     SUM(statistic.total_click) AS total_click,\
     SUM(statistic.total_page_views) AS total_page_views\
     FROM stats\
