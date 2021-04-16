@@ -15,19 +15,16 @@ const getAll = async (req, res, next) => {
           res.status(400).json({ error: err.message });
           return;
         }
-        console.log(row);
         totalCount = row[0]["COUNT (*)"];
-      }).all(stats.getDatabyPage(nextOffset, limit), [], function (err, row) {
+      }).all(stats.getSum, [limit, nextOffset], function (err, row) {
         if (err) {
           res.status(400).json({ error: err.message });
           return;
         }
         res.status(200).json({
-          data: {
-            totalCount,
-            totalPages: Math.ceil(totalCount / limit),
-            data: row,
-          },
+          totalCount,
+          totalPages: Math.ceil(totalCount / limit),
+          data: row,
         });
       });
     });
@@ -55,10 +52,8 @@ const getById = async (req, res, next) => {
           return;
         }
         res.status(200).json({
-          data: {
-            totalCount,
-            data: row,
-          },
+          totalCount,
+          data: row,
         });
       });
     });

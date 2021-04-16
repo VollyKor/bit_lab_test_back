@@ -17,8 +17,8 @@ const countAllDataById =
 
 // const getStatisticByPage = `Select * FROM stats INNER JOIN statistic ON statistic.user_id = stats.id LIMIT=? OFFSET=? `;
 
-const getAllData =
-  "Select * FROM stats INNER JOIN statistic ON statistic.user_id = stats.id";
+// const getAllData =
+//   "Select * FROM stats INNER JOIN statistic ON statistic.user_id = stats.id";
 
 const getDatabyPage = (offset = 0, limit = 50) =>
   `Select * FROM stats INNER JOIN statistic ON statistic.user_id = stats.id LIMIT ${limit} OFFSET ${offset} `;
@@ -54,7 +54,27 @@ const createTableStatistic =
 const addStatistic =
   "INSERT INTO statistic (user_id, date, total_click, total_page_views) VALUES (?,?,?,?)";
 
+const getAllData =
+  "Select * FROM stats INNER JOIN statistic ON statistic.user_id = stats.id";
+
+const getSum =
+  "SELECT stats.id,\
+    stats.first_name,\
+    stats.last_name,\
+    stats.email,\
+    stats.gender,\
+    stats.ip_adress,\
+    SUM(statistic.total_click) AS total_click,\
+    SUM(statistic.total_page_views) AS total_page_views\
+    FROM stats\
+    LEFT OUTER JOIN statistic ON statistic.user_id = stats.id\
+    GROUP BY statistic.user_id\
+    ORDER by stats.id\
+    LIMIT ? OFFSET ?";
+
 module.exports = {
+  getSum,
+  changeStat,
   getAllStatsbyId,
   countAllDataById,
   getDatabyPage,
