@@ -38,9 +38,12 @@ const db = new sqlite3.Database(
     }
   }
 );
+
 // =============================================================
 //  Fill Table Stats
 // =============================================================
+
+//  Маленькая таблица создалась по руководству из https://www.sqlitetutorial.net/
 db.serialize(() => {
   db.each(sql.countStats, (err, { amount }) => {
     if (amount !== 0) return;
@@ -67,8 +70,8 @@ db.serialize(() => {
   });
 });
 
-console.log("complete 1");
-
+//  Большая, слишком большая для предыдущего метода, танцы с бубном и она прогружается
+//  кажется это костыль, но как зделать нормально гугл не подсказывает
 db.serialize(() => {
   db.each(sql.countStatistic, async (err, { amount }) => {
     // console.log(count);

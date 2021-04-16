@@ -21,12 +21,12 @@ exports.countAllDataById =
   INNER JOIN statistic ON statistic.user_id = stats.id WHERE user_id = ?";
 
 exports.countAllData =
-  "SELECT COUNT (*) as amount\
-    FROM (\
-    SELECT SUM(statistic.total_click) AS total_click\
-    FROM stats\
-    LEFT OUTER JOIN statistic ON statistic.user_id = stats.id\
-    GROUP BY statistic.user_id\
+  "SELECT COUNT (*) as amount \
+        FROM (\
+        SELECT SUM(statistic.clicks) AS total_click\
+        FROM stats\
+        LEFT OUTER JOIN statistic ON statistic.user_id = stats.id\
+        GROUP BY statistic.user_id\
     )";
 
 exports.addStat =
@@ -70,8 +70,8 @@ exports.getSum =
     stats.gender,\
     stats.ip_adress,\
     statistic.user_id, \
-    SUM(statistic.total_click) AS total_click,\
-    SUM(statistic.total_page_views) AS total_page_views\
+    SUM(statistic.clicks) AS total_click,\
+    SUM(statistic.page_views) AS total_page_views\
     FROM stats\
     LEFT OUTER JOIN statistic ON statistic.user_id = stats.id\
     GROUP BY statistic.user_id\
