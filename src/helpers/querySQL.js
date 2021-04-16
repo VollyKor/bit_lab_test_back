@@ -1,4 +1,4 @@
-const createTableStats =
+exports.createTableStats =
   "CREATE TABLE IF NOT EXISTS stats( \
             id INTEGER PRIMARY KEY NOT NULL,\
             first_name NVARCHAR(20)  NOT NULL ,\
@@ -8,28 +8,33 @@ const createTableStats =
             ip_adress  VARCHAR(20)\
             ) ";
 
-const getAllStats = "SELECT * FROM stats";
+exports.getAllStatsbyId =
+  "SELECT * FROM stats \
+  INNER JOIN statistic ON statistic.user_id = stats.id\
+  WHERE user_id = ? ORDER BY date ASC";
 
-const getAllStatsbyId =
-  "SELECT * FROM stats INNER JOIN statistic ON statistic.user_id = stats.id WHERE user_id = ? ORDER BY date ASC";
-const countAllDataById =
-  " SELECT COUNT (*) FROM stats INNER JOIN statistic ON statistic.user_id = stats.id WHERE user_id = ?";
+exports.countStats = "select count (*) as amount from stats";
+exports.countStatistic = "select count (*) as amount from statistic";
 
-// const getStatisticByPage = `Select * FROM stats INNER JOIN statistic ON statistic.user_id = stats.id LIMIT=? OFFSET=? `;
+exports.countAllDataById =
+  " SELECT COUNT (*) FROM stats\
+  INNER JOIN statistic ON statistic.user_id = stats.id WHERE user_id = ?";
 
-// const getAllData =
-//   "Select * FROM stats INNER JOIN statistic ON statistic.user_id = stats.id";
+exports.countAllData =
+  "SELECT COUNT (*) as amount\
+    FROM (\
+    SELECT SUM(statistic.total_click) AS total_click\
+    FROM stats\
+    LEFT OUTER JOIN statistic ON statistic.user_id = stats.id\
+    GROUP BY statistic.user_id\
+    )";
 
-const getDatabyPage = (offset = 0, limit = 50) =>
-  `Select * FROM stats INNER JOIN statistic ON statistic.user_id = stats.id LIMIT ${limit} OFFSET ${offset} `;
+exports.addStat =
+  "INSERT INTO stats \
+  ( id, first_name, last_name, email, gender, ip_adress) \
+  VALUES(?,?,?,?,?,?)";
 
-const countAllData =
-  "SELECT COUNT (*) FROM stats INNER JOIN statistic ON statistic.user_id = stats.id";
-
-const addStat =
-  "INSERT INTO stats ( id, first_name, last_name,  email, gender, ip_adress) VALUES (?,?,?,?,?,?)";
-
-const changeStat = `UPDATE stats SET \
+exports.changeStat = `UPDATE stats SET \
  first_name = ?,\
   last_name = ?, \
   descr = ?,\
@@ -41,23 +46,23 @@ const changeStat = `UPDATE stats SET \
 
   WHERE id = ?`;
 
-const createTableStatistic =
+exports.createTableStatistic =
   "CREATE TABLE IF NOT EXISTS statistic( \
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, \
     user_id INTEGER,\
     date DATE, \
-    total_click INTEGER,\
-    total_page_views INTEGER,\
+    page_views INTEGER,\
+    clicks INTEGER,\
     FOREIGN KEY (user_id) REFERENCES stats (id) ON DELETE CASCADE\
     )";
 
-const addStatistic =
-  "INSERT INTO statistic (user_id, date, total_click, total_page_views) VALUES (?,?,?,?)";
+exports.addStatistic =
+  "INSERT INTO statistic (user_id, date, page_views, clicks) VALUES (?,?,?,?)";
 
-const getAllData =
+exports.getAllData =
   "Select * FROM stats INNER JOIN statistic ON statistic.user_id = stats.id";
 
-const getSum =
+exports.getSum =
   "SELECT DISTINCT stats.id,\
     stats.first_name,\
     stats.last_name,\
@@ -73,17 +78,17 @@ const getSum =
     ORDER by stats.id\
     LIMIT ? OFFSET ?";
 
-module.exports = {
-  getSum,
-  changeStat,
-  getAllStatsbyId,
-  countAllDataById,
-  getDatabyPage,
-  getAllData,
-  countAllData,
-  createTableStats,
-  createTableStatistic,
-  getAllStats,
-  addStat,
-  addStatistic,
-};
+// module.exports = {
+//   getSum,
+//   changeStat,
+//   getAllStatsbyId,
+//   countAllDataById,
+//   getDatabyPage,
+//   getAllData,
+//   countAllData,
+//   createTableStats,
+//   createTableStatistic,
+//   getAllStats,
+//   addStat,
+//   addStatistic,
+// };
