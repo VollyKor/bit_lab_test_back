@@ -40,7 +40,6 @@ const getById = async (req, res, next) => {
 
     db.serialize(async () => {
       db.all(stats.countAllDataById, [userId], function (err, row) {
-        console.log(row);
         if (err) {
           res.status(400).json({ error: err.message });
           return;
