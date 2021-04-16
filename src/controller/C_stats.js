@@ -10,7 +10,7 @@ const getAll = async (req, res, next) => {
     const nextOffset = (page - 1) * limit;
 
     db.serialize(async () => {
-      db.all(stats.countAllData, [], function (err, { amount }) {
+      db.each(stats.countAllData, [], function (err, { amount }) {
         if (err) return next(err);
         totalCount = amount;
       }).all(stats.getSum, [limit, nextOffset], function (err, row) {
@@ -36,12 +36,12 @@ const getById = async (req, res, next) => {
     let totalCount = 0;
 
     db.serialize(async () => {
-      db.all(stats.countAllDataById, [userId], function (err, row) {
+      db.each(stats.countAllDataById, [userId], function (err, { amount }) {
         if (err) {
           res.status(400).json({ error: err.message });
           return;
         }
-        totalCount = row[0]["COUNT (*)"];
+        totalCount = amount;
       }).all(stats.getAllStatsbyId, [userId], function (err, row) {
         if (err) {
           res.status(400).json({ error: err.message });
