@@ -33,25 +33,22 @@ const getAll = async (req, res, next) => {
 const getById = async (req, res, next) => {
   try {
     const { userId } = req.params;
-    let totalCount = 0;
+    const { dateFrom = "2019-09-00", dateTo = "2020-01-01" } = req.query;
 
     db.serialize(async () => {
-      db.each(stats.countAllDataById, [userId], function (err, { amount }) {
-        if (err) {
-          res.status(400).json({ error: err.message });
-          return;
+      db.all(
+        stats.getAllStatisticsbyId(dateFrom, dateTo),
+        [userId],
+        function (err, row) {
+          if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+          }
+          res.status(200).json({
+            data: row,
+          });
         }
-        totalCount = amount;
-      }).all(stats.getAllStatsbyId, [userId], function (err, row) {
-        if (err) {
-          res.status(400).json({ error: err.message });
-          return;
-        }
-        res.status(200).json({
-          totalCount,
-          data: row,
-        });
-      });
+      );
     });
   } catch (error) {
     next(error);

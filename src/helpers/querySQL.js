@@ -8,10 +8,13 @@ exports.createTableStats =
             ip_adress  VARCHAR(20)\
             ) ";
 
-exports.getAllStatsbyId =
-  "SELECT * FROM stats \
-  INNER JOIN statistic ON statistic.user_id = stats.id\
-  WHERE user_id = ? ORDER BY date ASC";
+exports.getAllStatisticsbyId = (from, to) =>
+  `SELECT *\
+    FROM stats\
+    INNER JOIN statistic ON statistic.user_id = stats.id\
+    WHERE user_id = ?\
+    and Date between '${from}' and '${to}'\
+    ORDER BY date ASC`;
 
 exports.countStats = "select count (*) as amount from stats";
 exports.countStatistic = "select count (*) as amount from statistic";
