@@ -7,7 +7,7 @@ const {
   validatePagination,
 } = require("../helpers/validateMiddleware");
 
-router.get("/", validatePagination, C_stats.getAll);
-router.get("/:userId", validateUserId, validateDate, C_stats.getById);
+router.get("/", C_stats.getAll);
+router.get("/:userId", validateDate, C_stats.getById);
 
 module.exports = router;
